@@ -47,6 +47,8 @@
 #include "Emu/Utility/OpEmulationState.h"
 #include "Emu/Utility/SkipOp.h"
 #include "Emu/Utility/GenericOperation.h"
+#include "Sim/Foundation/Hook/Hook.h"
+#include "Sim/Foundation/Hook/HookUtil.h"
 
 namespace Onikiri {
     class SystemIF;
@@ -96,6 +98,10 @@ namespace Onikiri {
             // MemIF の実装
             virtual void Read( MemAccess* access );
             virtual void Write( MemAccess* access );
+
+            // HookPoint
+            typedef std::pair<OpInfo**, int> GetOpHookParam;
+            static HookPoint<CommonEmulator<Traits>, GetOpHookParam> s_getOpHook;
 
         private:
             bool CreateProcesses( SystemIF* simSystem );
@@ -164,6 +170,9 @@ namespace Onikiri {
                 RESULT_ENTRY( "/Session/Result/System/@ResultCRC32", GetCRC_Result() )
             END_PARAM_MAP()
         };
+
+        template <class Traits>
+        HookPoint<CommonEmulator<Traits>, typename CommonEmulator<Traits>::GetOpHookParam> CommonEmulator<Traits>::s_getOpHook;
 
         template <class Traits>
         CommonEmulator<Traits>::CommonEmulator( SystemIF* simSystem )
@@ -377,7 +386,11 @@ namespace Onikiri {
 
             SkipOp op(this);
             while (skipCount-- != 0 && pc.address != 0 && !m_reqSkipTermination) {
-                std::pair<OpInfo**, int> ops_pair = GetOpBody(pc);
+                std::pair<OpInfo**, int> ops_pair;
+                HOOK_SECTION_PARAM(s_getOpHook, ops_pair)
+                {
+                    ops_pair = GetOp(pc);
+                }
                 OpInfo** opInfoArray = ops_pair.first;
                 int opCount = ops_pair.second;
 
@@ -389,6 +402,18 @@ namespace Onikiri {
                     OpEmulationState opState(&op, opInfo, process, pc, pc.address + ISAInfoType::InstructionWordBitSize/8, regArray);   // opからオペランド等を読んで OpEmulationState を構築
                     opInfo->GetEmulationFunc()(&opState);
                     opState.ApplyEmulationStateToRegArray<OpInfoType>(regArray);
+
+// for STRAIGHT debugging
+#if 0
+                    printf("0x%8lx 0x%8lx <-\t%s\t", pc.address, opState.GetDst(0), opInfo->GetMnemonic());
+                    for (int i = 0; i < opInfo->GetSrcNum(); i++)
+                    {
+                        printf("[%3d <- 0x%8lx] ", opInfo->GetDstOperand(0) - opInfo->GetSrcOperand(i), opState.GetSrc(i));
+                    }
+                    for (int i = 0; i < opInfo->GetImmNum(); i++)
+                        printf("(%ld) ", opInfo->GetImm(i));
+                    printf("npc:%8lx\n",opState.GetTakenPC());
+#endif
 
                     if( enableResultCRC ){
                         u64 dst = opInfo->GetDstNum() > 0 ? opState.GetDst(0) : 0;

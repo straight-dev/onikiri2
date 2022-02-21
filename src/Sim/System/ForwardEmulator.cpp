@@ -36,6 +36,7 @@
 #include "Sim/Core/Core.h"
 #include "Sim/Op/Op.h"
 #include "Sim/Foundation/SimPC.h"
+#include "Sim/Foundation/Hook/HookUtil.h"
 
 using namespace Onikiri;
 
@@ -48,6 +49,8 @@ ForwardEmulator::ForwardEmulator() :
 ForwardEmulator::~ForwardEmulator()
 {
 }
+
+HookPoint<ForwardEmulator, ForwardEmulator::GetOpHookParam> ForwardEmulator::s_getOpHook;
 
 void ForwardEmulator::Initialize( InitPhase phase )
 {
@@ -118,10 +121,14 @@ void ForwardEmulator::OnFetch( OpIterator simOp )
     entry->retireId = simOp->GetRetireID();
 
     // Get OpInfo
-    std::pair<OpInfo**, int> ops = 
-        m_emulator->GetOp( context->pc );
-    OpInfo** opInfoArray = ops.first;
-    int opCount          = ops.second;
+    GetOpHookParam param;
+    param.context = context;
+    HOOK_SECTION_PARAM(s_getOpHook, param)
+    {
+        param.opInfos = m_emulator->GetOp(context->pc);
+    }
+    OpInfo** opInfoArray = param.opInfos.first;
+    int opCount          = param.opInfos.second;
     ASSERT( context->microOpIndex < opCount );
     OpInfo* opInfo = opInfoArray[ context->microOpIndex ];
     entry->updatePC = context->microOpIndex >= opCount - 1;

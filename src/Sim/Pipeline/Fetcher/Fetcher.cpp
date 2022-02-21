@@ -70,6 +70,7 @@ namespace Onikiri
     HookPoint<Fetcher, Fetcher::SteeringHookParam> Fetcher::s_fetchSteeringHook;
     HookPoint<Fetcher, Fetcher::FetchDecisionHookParam> Fetcher::s_fetchDecisionHook;
     HookPoint<Fetcher, Fetcher::BranchPredictionHookParam> Fetcher::s_branchPredictionHook;
+    HookPoint<Fetcher, Fetcher::GetOpHookParam> Fetcher::s_getOpHook;
 };  // namespace Onikiri
 
 Fetcher::Fetcher() :
@@ -297,20 +298,20 @@ void Fetcher::Fetch(Thread* thread, FetchedOpArray& fetchedOp, PC pc, OpInfo** i
 
     fetchedOp.clear();
     for( int mopIndex = 0; mopIndex < numOp; ++mopIndex ) {
+        OpInitArgs args =
+        {
+            &pc,                        // PC*      pc;
+            infoArray[mopIndex],        // OpInfo*  opInfo;
+            mopIndex,                   // int      no;
+            m_globalClock->GetInsnID(), // u64      globalSerialID;
+            baseSerialID + mopIndex,    // u64      serialID;
+            baseRetireID + mopIndex,    // u64      retireID;
+            core,                       // Core*    core;
+            thread                      // Thread*  thread;
+        };
 
-        FetchHookParam param;
+        FetchHookParam param(nullptr, args, fetchedOp, m_globalClock, m_forwardEmulator);
         HOOK_SECTION_PARAM( s_fetchHook, param ){
-            OpInitArgs args = 
-            {
-                &pc,                        // PC*      pc;
-                infoArray[ mopIndex ],      // OpInfo* opInfo;
-                mopIndex,                   // int      no;
-                m_globalClock->GetInsnID(), // u64      globalSerialID;
-                baseSerialID + mopIndex,    // u64      serialID;
-                baseRetireID + mopIndex,    // u64      retireID;
-                core,                       // Core*        core;
-                thread                      // Thread*  thread;
-            };
 
             OpIterator op = InorderList->ConstructOp( args );
             param.op = op;
@@ -494,8 +495,10 @@ void Fetcher::Update()
             break;
         }
 
-        pair<OpInfo**, int> ops = m_emulator->GetOp(pc);
-
+        pair<OpInfo**, int> ops;
+        HOOK_SECTION_PARAM(s_getOpHook, ops) {
+            ops = m_emulator->GetOp(pc);
+        }
         OpInfo** opArray = ops.first;
         int numOp = ops.second;
 

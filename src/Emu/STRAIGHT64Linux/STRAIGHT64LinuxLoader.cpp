@@ -29,45 +29,33 @@
 // 
 
 
+#include <pch.h>
+#include "Emu/STRAIGHT64Linux/STRAIGHT64LinuxLoader.h"
+#include "STRAIGHT64Info.h"
 
-//
-// Additional type map for user defined classes.
-// This header file is included from "Sim/Resource/Builder/ResourceFactory.cpp"
-//
-//  Ex. :
-//    BEGIN_USER_RESOURCE_TYPE_MAP()
-//        RESOURCE_INTERFACE_ENTRY(Core)
-//        RESOURCE_TYPE_ENTRY(Core)
-//    END_USER_RESOURCE_TYPE_MAP()
-//
+using namespace std;
+using namespace boost;
+using namespace Onikiri;
+using namespace Onikiri::EmulatorUtility;
+using namespace Onikiri::STRAIGHT64Linux;
 
-#include "Samples/SampleNullModule.h"
-#include "Samples/SampleHookModule.h"
-#include "Samples/SampleBPred.h"
-#include "Samples/SamplePrefetcher.h"
-#include "Emu/STRAIGHT64Linux/STRAIGHTSystem.h"
+namespace {
+    const u16 MACHINE_STRAIGHT = 0x100;
+}
 
-BEGIN_USER_RESOURCE_TYPE_MAP()
+STRAIGHT64LinuxLoader::STRAIGHT64LinuxLoader()
+    : Linux64Loader(MACHINE_STRAIGHT) // machine = STRAIGHT
+{
+}
 
-    // You can remove the following if you don't need the samples.
+STRAIGHT64LinuxLoader::~STRAIGHT64LinuxLoader()
+{
+}
 
-#ifdef USE_SAMPLE_NULL
-    RESOURCE_TYPE_ENTRY( SampleNull )
-#endif
-
-#ifdef USE_SAMPLE_HOOK_MODULE
-    RESOURCE_TYPE_ENTRY( SampleHookModule )
-#endif
-
-#ifdef USE_SAMPLE_BPRED
-    RESOURCE_TYPE_ENTRY( SampleAlwaysHitBrDirPredictor )
-#endif
-
-#ifdef USE_SAMPLE_PREFETCHER
-    RESOURCE_TYPE_ENTRY( SamplePrefetcher )
-#endif
-    using namespace STRAIGHT64Linux;
-    RESOURCE_TYPE_ENTRY(STRAIGHTSystem)
-
-END_USER_RESOURCE_TYPE_MAP()
-
+u64 STRAIGHT64LinuxLoader::GetInitialRegValue(int index) const
+{
+    if (index == STRAIGHT64Info::StackPointerRegIndex)
+        return GetInitialSp();
+    else
+        return 0;
+}

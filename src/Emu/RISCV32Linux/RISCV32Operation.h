@@ -866,7 +866,7 @@ struct RISCV32RoundModeFromFCSR : public std::unary_function<EmulatorUtility::Op
 };
 
 
-void RISCV32SyscallSetArg(EmulatorUtility::OpEmulationState* opState)
+inline void RISCV32SyscallSetArg(EmulatorUtility::OpEmulationState* opState)
 {
     EmulatorUtility::SyscallConvIF* syscallConv = opState->GetProcessState()->GetSyscallConv();
     syscallConv->SetArg(0, SrcOperand<0>()(opState));
@@ -875,7 +875,7 @@ void RISCV32SyscallSetArg(EmulatorUtility::OpEmulationState* opState)
     DstOperand<0>::SetOperand(opState, SrcOperand<0>()(opState));
 }
 
-void RISCV32SyscallSetArg2(EmulatorUtility::OpEmulationState* opState)
+inline void RISCV32SyscallSetArg2(EmulatorUtility::OpEmulationState* opState)
 {
     EmulatorUtility::SyscallConvIF* syscallConv = opState->GetProcessState()->GetSyscallConv();
     syscallConv->SetArg(3, SrcOperand<1>()(opState));
@@ -883,7 +883,7 @@ void RISCV32SyscallSetArg2(EmulatorUtility::OpEmulationState* opState)
 }
 
 // invoke syscall, get result&error and branch if any
-void RISCV32SyscallCore(EmulatorUtility::OpEmulationState* opState)
+inline void RISCV32SyscallCore(EmulatorUtility::OpEmulationState* opState)
 {
     EmulatorUtility::SyscallConvIF* syscallConv = opState->GetProcessState()->GetSyscallConv();
     syscallConv->SetArg(5, SrcOperand<1>()(opState));

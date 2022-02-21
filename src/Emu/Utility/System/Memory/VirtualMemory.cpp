@@ -493,7 +493,7 @@ void VirtualMemory::MemCopyToTarget(u64 dst, const void* src, u64 size)
 void VirtualMemory::AssignPhysicalMemory(u64 addr, VIRTUAL_MEMORY_ATTR_TYPE attr)
 {
     if (m_pageTbl.IsMapped(addr)) {
-        THROW_RUNTIME_ERROR( "The specified target address is already mapped." );
+        //THROW_RUNTIME_ERROR( "The specified target address is already mapped." );
         //THROW_RUNTIME_ERROR( "%08x%08x is already mapped.", (u32)(addr >> 32), (u32)(addr & 0xffffffff) );
         return;
     }

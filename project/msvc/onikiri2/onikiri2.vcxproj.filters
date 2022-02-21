@@ -241,6 +241,9 @@
     <Filter Include="src\Emu\RISCV64Linux">
       <UniqueIdentifier>{4b1c157e-a1a2-4630-a289-f702d8aa66f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Emu\STRAIGHT64Linux">
+      <UniqueIdentifier>{ac561880-36dd-40e5-823b-d2811b5d8cec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Types.h">
@@ -1086,6 +1089,39 @@
     <ClInclude Include="..\..\..\src\Emu\RISCV64Linux\RISCV64OpInfo.h">
       <Filter>src\Emu\RISCV64Linux</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Converter.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Decoder.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Info.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxEmulator.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxLoader.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxSyscallConv.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxSyscallID.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxTraits.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Operation.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64OpInfo.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHTSystem.h">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\src\Emu\Utility\System\VirtualPath.h">
       <Filter>src\Emu\Utility\System</Filter>
     </ClInclude>
@@ -1573,6 +1609,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Emu\RISCV64Linux\RISCV64LinuxSyscallConv.cpp">
       <Filter>src\Emu\RISCV64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Converter.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Decoder.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64Info.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxLoader.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHT64LinuxSyscallConv.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Emu\STRAIGHT64Linux\STRAIGHTSystem.cpp">
+      <Filter>src\Emu\STRAIGHT64Linux</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Emu\Utility\System\VirtualPath.cpp">
       <Filter>src\Emu\Utility\System</Filter>

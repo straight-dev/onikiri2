@@ -29,45 +29,33 @@
 // 
 
 
+#include <pch.h>
 
-//
-// Additional type map for user defined classes.
-// This header file is included from "Sim/Resource/Builder/ResourceFactory.cpp"
-//
-//  Ex. :
-//    BEGIN_USER_RESOURCE_TYPE_MAP()
-//        RESOURCE_INTERFACE_ENTRY(Core)
-//        RESOURCE_TYPE_ENTRY(Core)
-//    END_USER_RESOURCE_TYPE_MAP()
-//
+#include "Emu/STRAIGHT64Linux/STRAIGHT64LinuxSyscallConv.h"
+#include "Emu/Utility/OpEmulationState.h"
 
-#include "Samples/SampleNullModule.h"
-#include "Samples/SampleHookModule.h"
-#include "Samples/SampleBPred.h"
-#include "Samples/SamplePrefetcher.h"
-#include "Emu/STRAIGHT64Linux/STRAIGHTSystem.h"
+using namespace Onikiri::EmulatorUtility;
+using namespace Onikiri::STRAIGHT64Linux;
 
-BEGIN_USER_RESOURCE_TYPE_MAP()
+STRAIGHT64LinuxSyscallConv::STRAIGHT64LinuxSyscallConv(ProcessState* processState) : 
+    RISCV64LinuxSyscallConv(processState)
+{
+}
 
-    // You can remove the following if you don't need the samples.
+STRAIGHT64LinuxSyscallConv::~STRAIGHT64LinuxSyscallConv()
+{
+}
 
-#ifdef USE_SAMPLE_NULL
-    RESOURCE_TYPE_ENTRY( SampleNull )
-#endif
+void STRAIGHT64LinuxSyscallConv::Execute(OpEmulationState* opState)
+{
+    // Ad-hoc putchar systemcall
+    if( GetArg( 0 ) == 'putc' ) {
+        std::cout << (unsigned char)GetArg(1); // writes the character, cast to an unsigned char, to stdout.
+        opState->SetTakenPC(opState->GetPC() + 4);
+        opState->SetTaken(true);
+        SetResult(true, (unsigned char)GetArg(1)); // returns the character written as an unsigned char cast to an int
+        return;
+    }
 
-#ifdef USE_SAMPLE_HOOK_MODULE
-    RESOURCE_TYPE_ENTRY( SampleHookModule )
-#endif
-
-#ifdef USE_SAMPLE_BPRED
-    RESOURCE_TYPE_ENTRY( SampleAlwaysHitBrDirPredictor )
-#endif
-
-#ifdef USE_SAMPLE_PREFETCHER
-    RESOURCE_TYPE_ENTRY( SamplePrefetcher )
-#endif
-    using namespace STRAIGHT64Linux;
-    RESOURCE_TYPE_ENTRY(STRAIGHTSystem)
-
-END_USER_RESOURCE_TYPE_MAP()
-
+    RISCV64LinuxSyscallConv::Execute(opState);
+}

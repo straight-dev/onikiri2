@@ -41,6 +41,7 @@
 #include "Sim/System/EmulationSystem/EmulationOp.h"
 #include "Sim/Op/OpArray/OpArray.h"
 #include "Sim/Memory/MemOrderManager/MemOrderOperations.h"
+#include "Sim/Foundation/Hook/Hook.h"
 
 namespace Onikiri 
 {
@@ -80,6 +81,13 @@ namespace Onikiri
         // Accessors
         EmulatorIF* GetEmulator() const { return m_emulator; };
         bool IsEnabled() const { return m_enable; }
+
+        // HookPoint
+        typedef struct {
+            std::pair<OpInfo**, int> opInfos;
+            ArchitectureState* context;
+        } GetOpHookParam;
+        static HookPoint<ForwardEmulator, GetOpHookParam> s_getOpHook;
 
         //
         // PhysicalResouceNode

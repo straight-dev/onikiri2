@@ -4,8 +4,8 @@
 // Copyright (c) 2005-2008 Hironori Ichibayashi.
 // Copyright (c) 2008-2009 Kazuo Horio.
 // Copyright (c) 2009-2015 Naruki Kurata.
-// Copyright (c) 2005-2015 Ryota Shioya.
 // Copyright (c) 2005-2015 Masahiro Goshima.
+// Copyright (c) 2005-2017 Ryota Shioya.
 // 
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -29,45 +29,26 @@
 // 
 
 
+#ifndef EMU_STRAIGHT64LINUX_STRAIGHT64_LOADER_H
+#define EMU_STRAIGHT64LINUX_STRAIGHT64_LOADER_H
 
-//
-// Additional type map for user defined classes.
-// This header file is included from "Sim/Resource/Builder/ResourceFactory.cpp"
-//
-//  Ex. :
-//    BEGIN_USER_RESOURCE_TYPE_MAP()
-//        RESOURCE_INTERFACE_ENTRY(Core)
-//        RESOURCE_TYPE_ENTRY(Core)
-//    END_USER_RESOURCE_TYPE_MAP()
-//
+#include "Emu/Utility/System/Loader/Linux64Loader.h"
 
-#include "Samples/SampleNullModule.h"
-#include "Samples/SampleHookModule.h"
-#include "Samples/SampleBPred.h"
-#include "Samples/SamplePrefetcher.h"
-#include "Emu/STRAIGHT64Linux/STRAIGHTSystem.h"
 
-BEGIN_USER_RESOURCE_TYPE_MAP()
+namespace Onikiri {
+    namespace STRAIGHT64Linux {
+        // STRAIGHT64Linux ELF 用のローダー
+        class STRAIGHT64LinuxLoader : public EmulatorUtility::Linux64Loader
+        {
+        public:
+            STRAIGHT64LinuxLoader();
+            virtual ~STRAIGHT64LinuxLoader();
 
-    // You can remove the following if you don't need the samples.
+            // LoaderIF の実装
+            virtual u64 GetInitialRegValue(int index) const;
+        };
 
-#ifdef USE_SAMPLE_NULL
-    RESOURCE_TYPE_ENTRY( SampleNull )
+    } // namespace STRAIGHT64Linux
+} // namespace Onikiri
+
 #endif
-
-#ifdef USE_SAMPLE_HOOK_MODULE
-    RESOURCE_TYPE_ENTRY( SampleHookModule )
-#endif
-
-#ifdef USE_SAMPLE_BPRED
-    RESOURCE_TYPE_ENTRY( SampleAlwaysHitBrDirPredictor )
-#endif
-
-#ifdef USE_SAMPLE_PREFETCHER
-    RESOURCE_TYPE_ENTRY( SamplePrefetcher )
-#endif
-    using namespace STRAIGHT64Linux;
-    RESOURCE_TYPE_ENTRY(STRAIGHTSystem)
-
-END_USER_RESOURCE_TYPE_MAP()
-

@@ -10,7 +10,7 @@
       Name="linux" 
       HostString="Linux"
       CXX="g++" 
-      CXXFlags="-Wall -Werror -O2 -g -std=c++11 -DONIKIRI_DEBUG -Wno-deprecated-declarations -Wno-unused-const-variable -Wno-unused-private-field"
+      CXXFlags="-Wall -O2 -g -std=c++14 -DONIKIRI_DEBUG -Wno-deprecated-declarations -Wno-unused-const-variable -Wno-unused-private-field"
       LDFlags="-static -lpthread" 
       CleanTargets="*.o *.d *.gch"
       WorkingDirectory="WorkLinux" 

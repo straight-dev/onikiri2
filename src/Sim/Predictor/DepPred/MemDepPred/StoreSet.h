@@ -110,6 +110,9 @@ namespace Onikiri {
             RESOURCE_ENTRY( Core, "core", m_core )
         END_RESOURCE_MAP()
 
+        using ParamExchange::LoadParam;
+        using ParamExchange::ReleaseParam;
+
         StoreSet();
         virtual ~StoreSet();
 

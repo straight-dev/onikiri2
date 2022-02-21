@@ -29,45 +29,31 @@
 // 
 
 
+#ifndef EMU_STRAIGHT64LINUX_STRAIGHT64LINUX_SYSCALL_CONV_H
+#define EMU_STRAIGHT64LINUX_STRAIGHT64LINUX_SYSCALL_CONV_H
 
-//
-// Additional type map for user defined classes.
-// This header file is included from "Sim/Resource/Builder/ResourceFactory.cpp"
-//
-//  Ex. :
-//    BEGIN_USER_RESOURCE_TYPE_MAP()
-//        RESOURCE_INTERFACE_ENTRY(Core)
-//        RESOURCE_TYPE_ENTRY(Core)
-//    END_USER_RESOURCE_TYPE_MAP()
-//
+#include "Emu/RISCV64Linux/RISCV64LinuxSyscallConv.h"
 
-#include "Samples/SampleNullModule.h"
-#include "Samples/SampleHookModule.h"
-#include "Samples/SampleBPred.h"
-#include "Samples/SamplePrefetcher.h"
-#include "Emu/STRAIGHT64Linux/STRAIGHTSystem.h"
+namespace Onikiri {
 
-BEGIN_USER_RESOURCE_TYPE_MAP()
+    namespace EmulatorUtility {
+        class ProcessState;
+        class OpEmulationState;
+    }
 
-    // You can remove the following if you don't need the samples.
+    namespace STRAIGHT64Linux {
 
-#ifdef USE_SAMPLE_NULL
-    RESOURCE_TYPE_ENTRY( SampleNull )
+        class STRAIGHT64LinuxSyscallConv : public RISCV64Linux::RISCV64LinuxSyscallConv
+        {
+        public:
+            STRAIGHT64LinuxSyscallConv(EmulatorUtility::ProcessState* processState);
+            virtual ~STRAIGHT64LinuxSyscallConv();
+
+            // SetArg によって与えられた引数に従ってシステムコールを行う
+            virtual void Execute(EmulatorUtility::OpEmulationState* opState) override;
+        };
+
+    } // namespace STRAIGHT64Linux
+} // namespace Onikiri
+
 #endif
-
-#ifdef USE_SAMPLE_HOOK_MODULE
-    RESOURCE_TYPE_ENTRY( SampleHookModule )
-#endif
-
-#ifdef USE_SAMPLE_BPRED
-    RESOURCE_TYPE_ENTRY( SampleAlwaysHitBrDirPredictor )
-#endif
-
-#ifdef USE_SAMPLE_PREFETCHER
-    RESOURCE_TYPE_ENTRY( SamplePrefetcher )
-#endif
-    using namespace STRAIGHT64Linux;
-    RESOURCE_TYPE_ENTRY(STRAIGHTSystem)
-
-END_USER_RESOURCE_TYPE_MAP()
-

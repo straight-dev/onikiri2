@@ -29,45 +29,29 @@
 // 
 
 
+#ifndef EMU_STRAIGHT64LINUX_STRAIGHT64_TRAITS_H
+#define EMU_STRAIGHT64LINUX_STRAIGHT64_TRAITS_H
 
-//
-// Additional type map for user defined classes.
-// This header file is included from "Sim/Resource/Builder/ResourceFactory.cpp"
-//
-//  Ex. :
-//    BEGIN_USER_RESOURCE_TYPE_MAP()
-//        RESOURCE_INTERFACE_ENTRY(Core)
-//        RESOURCE_TYPE_ENTRY(Core)
-//    END_USER_RESOURCE_TYPE_MAP()
-//
+#include "Emu/STRAIGHT64Linux/STRAIGHT64LinuxSyscallConv.h"
+#include "Emu/STRAIGHT64Linux/STRAIGHT64LinuxLoader.h"
+#include "Emu/STRAIGHT64Linux/STRAIGHT64Info.h"
+#include "Emu/STRAIGHT64Linux/STRAIGHT64Converter.h"
+#include "Emu/STRAIGHT64Linux/STRAIGHT64OpInfo.h"
 
-#include "Samples/SampleNullModule.h"
-#include "Samples/SampleHookModule.h"
-#include "Samples/SampleBPred.h"
-#include "Samples/SamplePrefetcher.h"
-#include "Emu/STRAIGHT64Linux/STRAIGHTSystem.h"
+namespace Onikiri {
+    namespace STRAIGHT64Linux {
 
-BEGIN_USER_RESOURCE_TYPE_MAP()
+        struct STRAIGHT64LinuxTraits {
+            typedef STRAIGHT64Info ISAInfoType;
+            typedef STRAIGHT64OpInfo OpInfoType;
+            typedef STRAIGHT64Converter ConverterType;
+            typedef STRAIGHT64LinuxLoader LoaderType;
+            typedef STRAIGHT64LinuxSyscallConv SyscallConvType;
 
-    // You can remove the following if you don't need the samples.
+            static const bool IsBigEndian = false;
+        };
 
-#ifdef USE_SAMPLE_NULL
-    RESOURCE_TYPE_ENTRY( SampleNull )
+    } // namespace STRAIGHT64Linux
+} // namespace Onikiri
+
 #endif
-
-#ifdef USE_SAMPLE_HOOK_MODULE
-    RESOURCE_TYPE_ENTRY( SampleHookModule )
-#endif
-
-#ifdef USE_SAMPLE_BPRED
-    RESOURCE_TYPE_ENTRY( SampleAlwaysHitBrDirPredictor )
-#endif
-
-#ifdef USE_SAMPLE_PREFETCHER
-    RESOURCE_TYPE_ENTRY( SamplePrefetcher )
-#endif
-    using namespace STRAIGHT64Linux;
-    RESOURCE_TYPE_ENTRY(STRAIGHTSystem)
-
-END_USER_RESOURCE_TYPE_MAP()
-

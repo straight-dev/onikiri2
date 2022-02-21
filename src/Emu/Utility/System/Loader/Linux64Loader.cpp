@@ -91,7 +91,7 @@ void Linux64Loader::LoadBinary(MemorySystem* memory, const String& hostBinaryPat
                 initialBrk = max(initialBrk, ph.p_vaddr+ph.p_memsz);
 
                 if( memory->GetReservedAddressRange() >= ph.p_vaddr ){
-                    THROW_RUNTIME_ERROR( "Reserved address region is too large.");
+                    //THROW_RUNTIME_ERROR( "Reserved address region is too large.");
                 }
             }
             //if (ph.p_flags & PF_W && writable_base == 0) {
